@@ -4,9 +4,10 @@
 	</description>
 
 	<!-- set global properties for this build -->
-	<property name="src" location="." />
+	<property name="src"   location="." />
 	<property name="build" location="build" />
 	<property name="dist"  location="dist" />
+	<property name="docs"  location="docs" />
 
 	<target name="init">
 		<!-- Create the time stamp -->
@@ -15,13 +16,34 @@
 		<!-- Create the build directory structure used by compile -->
 		<mkdir dir="${build}" />
 	</target>
+	
+	<target name="doc" description="Build the documentation">
+		<javadoc
+			destdir="${docs}"
+			author="true"
+			version="true"
+			use="true"
+			windowtitle="PureJavaHTTPServer">
+
+			<packageset dir="." defaultexcludes="yes">
+				<include name="uk/**"/>
+			</packageset>
+
+			<!--<doctitle><![CDATA[<h1>Test</h1>]]></doctitle>
+			<bottom><![CDATA[<i>Copyright &#169; 2000 Dummy Corp. All Rights Reserved.</i>]]></bottom>-->
+			<!--<group title="Group 1 Packages" packages="com.dummy.test.a*"/>
+			<group title="Group 2 Packages" packages="com.dummy.test.b*:com.dummy.test.c*"/>
+			<link offline="true" href="http://download.oracle.com/javase/6/docs/api/" packagelistLoc="C:\tmp"/>
+			<link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/>-->
+		</javadoc>
+	</target>
 
 	<target name="compile" depends="init" description="Build the source files" >
 		<!-- Compile the java code from ${src} into ${build} -->
 		<javac srcdir="${src}" destdir="${build}" includeantruntime="false" />
 	</target>
 
-	<target name="dist" depends="compile" description="Generate a linkable JAR" >
+	<target name="dist" depends="compile,doc" description="Generate a linkable JAR" >
 		<!-- Create the distribution directory -->
 		<mkdir dir="${dist}/lib" />
 
@@ -33,5 +55,6 @@
 		<!-- Delete the ${build} and ${dist} directory trees -->
 		<delete dir="${build}" />
 		<delete dir="${dist}" />
+		<delete dir="${docs}" />
 	</target>
 </project>
